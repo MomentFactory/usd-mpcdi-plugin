@@ -5,11 +5,13 @@ MPCDI is a VESA interchange format for videoprojectors technical data.
 
 # Requirements
 1. An USD Installation (tested with USD 22.11 and above)
-2. CMake
+2. CMake, version 
+3. Visual Studio (2017 is Preferred)
 
 # Build Instructions
 1. `cmake . -DPXR_PATH=PATH_TO_USD_INSTALL`
-2. Open the generated `.sln` file and compile.
+2. You may specify the location of you Python header with the following : 
+3. Open the generated `.sln` file in Visual Studio and compile.
 
 # Building for Omniverse
 An Omniverse extension uses this usd-mpcdi-plugin as a submodule, offering an alternative build procedure to compile using NVIDIA's USD (nv-usd). 
