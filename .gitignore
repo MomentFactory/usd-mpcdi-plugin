@@ -1,0 +1,15 @@
+#ignore visual studio files
+.vs/
+*.sln
+*.vcxproj
+*.vcxproj.filters
+mpcdiFileFormat.vcxproj.user
+x64/
+
+#ignore Cmake temp files
+CmakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+mpcdiFileFormat.dir/
+DartConfiguration.tcl
+
