@@ -15,7 +15,6 @@ add_library(mpcdiFileFormat
   tinyxml2.cpp tinyxml2.h 
   plugInfo.json
 
-  PRIVATE_HEADERS
   mpcdiPluginManager.h 
   mpcdiFileFormat.h 
 )
@@ -44,3 +43,4 @@ target_include_directories(mpcdiFileFormat
 set_target_properties(mpcdiFileFormat
     PROPERTIES
     PREFIX ""
+)
