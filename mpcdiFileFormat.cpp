@@ -45,10 +45,13 @@ MpcdiFileFormat::MpcdiFileFormat() : SdfFileFormat(
 										MpcdiFileFormatTokens->Id,
 										MpcdiFileFormatTokens->Version,
 										MpcdiFileFormatTokens->Target,
-										"mpcdi")
+										MpcdiFileFormatTokens->Extension)
 {
 }
 
+MpcdiFileFormat::~MpcdiFileFormat()
+{
+}
 
 static const double defaultSideLengthValue = 1.0;
 
@@ -351,10 +354,10 @@ bool MpcdiFileFormat::CanFieldChangeAffectFileFormatArguments(const TfToken& fie
 // locally here
 TF_DEFINE_PUBLIC_TOKENS(
 	MpcdiFileFormatTokens,
-	((Id, "edfFileFormat"))
+	((Id, "mpcdiFileFormat"))
 	((Version, "1.0"))
 	((Target, "usd"))
-	((Extension, "edf"))
+	((Extension, "xml"))
 	((SideLength, "Usd_Triangle_SideLength"))
 );
 
