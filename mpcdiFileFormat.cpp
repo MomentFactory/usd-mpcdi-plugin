@@ -178,7 +178,8 @@ bool MpcdiFileFormat::Read(SdfLayer* layer, const std::string& resolvedPath, boo
 		std::string bufferIdentifier = CleanNameForUSD(bufferId);
 
 		SdfPath bufferPath = xformPath.AppendChild(TfToken(bufferIdentifier));
-
+		auto bufferScope = UsdGeomScope::Define(stage, bufferPath);
+		
 		// Get region
 		for(auto* regionNode = buffer->FirstChildElement("region"); regionNode != nullptr; regionNode = regionNode->NextSiblingElement("region"))
 		{
