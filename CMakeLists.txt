@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 
 SET(PXR_PATH "" CACHE STRING "Path to USD install")
+SET(PYTHON_PATH "" CACHE STRING "Path to Python install")
 
 project(mpcdiFileFormat)
 
@@ -38,6 +39,7 @@ target_link_libraries(mpcdiFileFormat
 target_include_directories(mpcdiFileFormat
     PRIVATE
     ${PXR_PATH}/include
+	${PYTHON_PATH}/include
     ${PXR_PATH}/include/boost-1_78
 )
 set_target_properties(mpcdiFileFormat

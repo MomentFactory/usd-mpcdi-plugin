@@ -30,6 +30,7 @@
 #include <pxr/usd/usdGeom/camera.h>
 #include <pxr/usd/usdGeom/cube.h>
 #include <pxr/usd/usdGeom/xformable.h>
+#include <pxr/usd/usdGeom/xform.h>
 
 #include <pxr/usd/usdLux/rectLight.h>
 
@@ -166,8 +167,7 @@ bool MpcdiFileFormat::Read(SdfLayer* layer, const std::string& resolvedPath, boo
 	UsdStageRefPtr stage = UsdStage::Open(newLayer);
 
 	const auto& xformPath = SdfPath("/mpcdi_payload");
-
-	auto mpdiScope = UsdGeomMesh::Define(stage, xformPath);
+	auto mpdiScope = UsdGeomXform::Define(stage, xformPath);
 	stage->SetDefaultPrim(mpdiScope.GetPrim());
 
 	auto displayNode = rootNode->FirstChildElement("display");
@@ -178,7 +178,6 @@ bool MpcdiFileFormat::Read(SdfLayer* layer, const std::string& resolvedPath, boo
 		std::string bufferIdentifier = CleanNameForUSD(bufferId);
 
 		SdfPath bufferPath = xformPath.AppendChild(TfToken(bufferIdentifier));
-		UsdGeomScope bufferUSD = UsdGeomScope::Define(stage, bufferPath);
 
 		// Get region
 		for(auto* regionNode = buffer->FirstChildElement("region"); regionNode != nullptr; regionNode = regionNode->NextSiblingElement("region"))
@@ -187,7 +186,6 @@ bool MpcdiFileFormat::Read(SdfLayer* layer, const std::string& resolvedPath, boo
 			const std::string cleanedRegionId = CleanNameForUSD(regionId);
 
 			SdfPath regionPath = bufferPath.AppendChild(TfToken(cleanedRegionId));
-			UsdGeomScope regionUSD = UsdGeomScope::Define(stage, regionPath);
 
 			// Get Frustum
 			auto frustumNode = regionNode->FirstChildElement("frustum");
@@ -240,8 +238,7 @@ bool MpcdiFileFormat::Read(SdfLayer* layer, const std::string& resolvedPath, boo
 			newPosition[2] = -newPosition[2];
 
 			// Camera
-			SdfPath cameraPath = regionPath.AppendChild(TfToken("Camera"));
-			UsdGeomCamera camera = UsdGeomCamera::Define(stage, cameraPath);
+			UsdGeomCamera camera = UsdGeomCamera::Define(stage, regionPath);
 
 			// Camera transform
 			auto cameraXform = UsdGeomXformable(camera);
@@ -260,7 +257,7 @@ bool MpcdiFileFormat::Read(SdfLayer* layer, const std::string& resolvedPath, boo
 			camera.GetVerticalApertureOffsetAttr().Set(apertureOffsetV);
 
 			// Light
-			SdfPath lightPath = cameraPath.AppendChild(TfToken("RectLight"));
+			SdfPath lightPath = regionPath.AppendChild(TfToken("RectLight"));
 			auto rectLight = UsdLuxRectLight::Define(stage, lightPath);
 			auto lightXform = UsdGeomXformable(rectLight);
     		auto lightTranslateOperation = lightXform.AddTranslateOp(UsdGeomXformOp::PrecisionFloat);
@@ -284,7 +281,7 @@ bool MpcdiFileFormat::Read(SdfLayer* layer, const std::string& resolvedPath, boo
 			rectLight.GetHeightAttr().Set(lightHeight);
 
 			// Projector box
-			SdfPath cubePath = cameraPath.AppendChild(TfToken("ProjectorBox"));
+			SdfPath cubePath = regionPath.AppendChild(TfToken("ProjectorBox"));
 			UsdGeomCube projectorBoxMesh = UsdGeomCube::Define(stage, cubePath);
 			
 			const auto projectorBoxSize = GfVec3f(50, 15, 40);
